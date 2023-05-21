@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import Popup from "./Popup/Popup";
 import axios from "axios";
+import Loader from "../Loader/Loader";
 const App = () => {
   const [image, setImage] = useState(" ");
-
-  const dummyData = [
-    {
-      0: "Adenocarcinoma",
-      1: "Large Cell Carcinoma",
-      2: "Normal",
-      3: "Sqaumous Cell Carcinoma",
-    },
-  ];
   // dummyData.map((item) => console.log(item));
-  const [result, setResult] = useState("Please upload the image correctly");
-  const [response, setResponse] = useState({});
+  // const [result, setResult] = useState({
+  //   status:200
+  // });
+  const [response, setResponse] = useState({
+  });
 
   const handleImage = (e) => {
     console.log(e.target.files);
@@ -32,6 +27,7 @@ const App = () => {
       .catch((error) => {
         console.log(error);
       });
+      setResult(response.data);
   };
   const [trigger, setTrigger] = useState(false);
   console.log(response);
@@ -51,7 +47,10 @@ const App = () => {
         </h1>
         <p className="lg:text-2xl">and start diagnosis</p>
         <p className="lg:text-xl">right now!!!</p>
-        <form onSubmit={(e) => handleSubmit(e)} className="form">
+        <form
+          onSubmit={(e) => handleSubmit(e)}
+          className="form flex flex-col items-center justify-center gap-5"
+        >
           <input
             className="self-center"
             accept="image/png, image/gif, image/jpeg"
@@ -60,17 +59,25 @@ const App = () => {
             name="file"
             onChange={handleImage}
           />
-          <button className="bg-red-100 p-4 rounded-lg" type="submit">
+          <button className="bg-red-100 p-4 rounded-lg w-[10rem]" type="submit">
             Submit
           </button>
         </form>
-        <button
-          onClick={() => setTrigger(!trigger)}
-          className="bg-red-100 p-4 rounded-lg"
-        >
-          Popup
-        </button>
-        <Popup trigger={trigger} setTrigger={setTrigger}></Popup>
+        {response.status === 200 ? (
+          <>
+            <button
+              onClick={() => setTrigger(!trigger)}
+              className="bg-red-100 p-4 rounded-lg"
+            >
+              Popup
+            </button>
+            <Popup data={response.data} trigger={trigger} setTrigger={setTrigger} />
+          </>
+        ) : (
+          <>
+            <Loader />
+          </>
+        )}
       </div>
     </div>
   );
