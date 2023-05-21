@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Popup from "./Popup/Popup";
 import axios from "axios";
 const App = () => {
+  const [image, setImage] = useState(" ");
+
   const dummyData = [
     {
       0: "Adenocarcinoma",
@@ -10,23 +12,29 @@ const App = () => {
       3: "Sqaumous Cell Carcinoma",
     },
   ];
-  dummyData.map((item) => console.log(item));
+  // dummyData.map((item) => console.log(item));
   const [result, setResult] = useState("Please upload the image correctly");
   const [response, setResponse] = useState({});
+
+  const handleImage = (e) => {
+    console.log(e.target.files);
+    setImage(e.target.files[0]);
+  };
   const handleSubmit = async (e) => {
     const formEle = document.querySelector("form");
     const formDatab = new FormData(formEle);
+    formDatab.append("image", image);
     await axios
       .post("http://127.0.0.1:5000/predict", formDatab)
       .then((res) => {
-        console.log(setResponse(JSON.stringify(res.data)));
+       setResponse(JSON.stringify(res));
       })
       .catch((error) => {
         console.log(error);
       });
   };
   const [trigger, setTrigger] = useState(false);
-  console.log(response)
+  console.log(response);
   return (
     <div className="bg-primary w-full lg:w-full min-h-screen mx-auto flex flex-col items-center justify-center overflow-hidden ">
       <div className="relative w-full max-w-[768px]">
@@ -43,14 +51,18 @@ const App = () => {
         </h1>
         <p className="lg:text-2xl">and start diagnosis</p>
         <p className="lg:text-xl">right now!!!</p>
-        <form onSubmit={(e) => handleSubmt(e)} className="form">
+        <form onSubmit={(e) => handleSubmit(e)} className="form">
           <input
             className="self-center"
             accept="image/png, image/gif, image/jpeg"
             type="file"
             id="file"
+            name="file"
+            onChange={handleImage}
           />
-          <button className="bg-red-100 p-4 rounded-lg" type="submit">Submit</button>
+          <button className="bg-red-100 p-4 rounded-lg" type="submit">
+            Submit
+          </button>
         </form>
         <button
           onClick={() => setTrigger(!trigger)}
