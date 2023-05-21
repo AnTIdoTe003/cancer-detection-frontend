@@ -21,6 +21,7 @@ const App = () => {
     setImage(e.target.files[0]);
   };
   const handleSubmit = async (e) => {
+    e.preventDefault();
     const formEle = document.querySelector("form");
     const formDatab = new FormData(formEle);
     formDatab.append("image", image);
