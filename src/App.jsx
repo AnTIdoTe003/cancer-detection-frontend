@@ -23,12 +23,12 @@ const App = () => {
     await axios
       .post("http://127.0.0.1:5000/predict", formDatab)
       .then((res) => {
-       setResponse(JSON.stringify(res));
+       setResponse(res);
       })
       .catch((error) => {
         console.log(error);
       });
-      setResult(response.data);
+      // setResult(response.data);
   };
   const [trigger, setTrigger] = useState(false);
   console.log(response);
@@ -64,6 +64,7 @@ const App = () => {
             Submit
           </button>
         </form>
+        {console.log(response.status)}
         {response.status === 200 ? (
           <>
             <button
