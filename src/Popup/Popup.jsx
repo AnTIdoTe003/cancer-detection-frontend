@@ -1,6 +1,18 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Popup = ({ trigger, setTrigger, data }) => {
+  const [result, setResult]= useState("")
+  console.log(data.prediction);
+  if(data.prediction==0){
+      setResult("Adenocarcinoma");
+  } if (data.prediction == 1) {
+     setResult("Lage Cell Carcinnoma");
+  } if(data.prediction ==2){
+    setResult("Normal");
+  } if (data.prediction ==3){
+ setResult("Squamous Cell Carcinoma");
+  }
+  console.log(result)
     const dummyData = [
       {
         number: 0,
@@ -34,15 +46,10 @@ const Popup = ({ trigger, setTrigger, data }) => {
   return trigger ? (
     <>
       <div onClick={()=>setTrigger(false)} className="bg-white/[0.6] flex justify-center items-center h-full w-full fixed backdrop-blur-xl ">
-        <div ref={ref} className="bg-white h-72 w-72 rounded-md flex justify-center items-center">{
-          dummyData.filter((ele)=>{return ele.number ===data}).map((ele)=>{
-            return(
-              <h2>
-                {ele.type}
-              </h2>
-            )
-          })
-        }</div>
+        <div ref={ref} className="text-black bg-white h-72 w-72 rounded-md flex justify-center items-center">
+        {/* <h2>{result}</h2> */}
+        {data.prediction}
+        </div>
       </div>
     </>
   ) : (
